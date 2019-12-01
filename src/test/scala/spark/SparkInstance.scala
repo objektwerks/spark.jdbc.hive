@@ -10,13 +10,12 @@ object SparkInstance {
 
   val sparkWarehouseDir = new File("./target/spark-warehouse").getAbsolutePath
   val sparkEventLogDir = "/tmp/spark-events"
-  val sparkEventDirCreated = makeSparkEventLogDir(sparkEventLogDir)
-  logger.info(s"*** $sparkEventLogDir exists or was created: $sparkEventDirCreated")
+  makeSparkEventLogDir(sparkEventLogDir)
 
   val sparkSession = SparkSession
     .builder
     .master("local[*]")
-    .appName("spark-app")
+    .appName("jdbc-hive-job")
     .config("spark.sql.shuffle.partitions", "4")
     .config("spark.sql.warehouse.dir", sparkWarehouseDir)
     .config("spark.eventLog.enabled", value = true)
