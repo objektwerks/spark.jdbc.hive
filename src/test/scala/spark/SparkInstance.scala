@@ -1,25 +1,25 @@
 package spark
 
-import java.io.File
-
+import com.typesafe.config.ConfigFactory
 import org.apache.spark.sql.SparkSession
 import org.apache.log4j.Logger
 
 object SparkInstance {
-  private val logger = Logger.getLogger(getClass.getSimpleName)
+  val logger = Logger.getLogger(getClass.getSimpleName)
+  val conf = ConfigFactory.load("test.conf").getConfig("job")
 
-  val sparkWarehouseDir = new File("./target/spark-warehouse").getAbsolutePath
-  val sparkEventLogDir = "/tmp/spark-events"
-  makeSparkEventLogDir(sparkEventLogDir)
+  makeSparkEventLogDir(conf.getString("spark.eventLog.dir"))
+
+  // Fixes Derby AccessControl Exception: org.apache.derby.security.SystemPermission( "engine", "usederbyinternals" )
+  System.setSecurityManager(null)
 
   val sparkSession = SparkSession
     .builder
-    .master("local[*]")
-    .appName("jdbc-hive-job")
-    .config("spark.sql.shuffle.partitions", "4")
-    .config("spark.sql.warehouse.dir", sparkWarehouseDir)
-    .config("spark.eventLog.enabled", value = true)
-    .config("spark.eventLog.dir", sparkEventLogDir)
+    .appName(conf.getString("name"))
+    .master(conf.getString("master"))
+    .config("spark.serializer", conf.getString("spark.serializer"))
+    .config("spark.eventLog.enabled", conf.getBoolean("spark.eventLog.enabled"))
+    .config("spark.eventLog.dir", conf.getString("spark.eventLog.dir"))
     .enableHiveSupport
     .getOrCreate()
   val sparkContext = sparkSession.sparkContext
