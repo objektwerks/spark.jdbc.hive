@@ -1,6 +1,6 @@
 name := "spark.jdbc.hive"
 organization := "objektwerks"
-version := "0.1-SNAPSHOT"
+version := "0.1"
 scalaVersion := "2.11.12"
 libraryDependencies ++= {
   val sparkVersion = "2.4.0"
