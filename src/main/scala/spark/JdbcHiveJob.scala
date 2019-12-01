@@ -5,15 +5,13 @@ import org.apache.log4j.Logger
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
 
-import scala.util.Try
-
 object JdbcHiveJob {
   def main(args: Array[String]): Unit = {
     val logger = Logger.getLogger(getClass.getSimpleName)
     val conf = ConfigFactory.load("job.conf").getConfig("job")
 
     makeSparkEventLogDir(conf.getString("spark.eventLog.dir"))
-    runJob(logger, conf, areaOfInterestRadiusInKilometers, hitDaysHence)
+    runJob(logger, conf)
   }
 
   def runJob(logger: Logger, conf: Config): Unit = {
@@ -23,7 +21,6 @@ object JdbcHiveJob {
       .set("spark.serializer", conf.getString("spark.serializer"))
       .set("spark.eventLog.enabled", conf.getBoolean("spark.eventLog.enabled").toString)
       .set("spark.eventLog.dir", conf.getString("spark.eventLog.dir"))
-      .registerKryoClasses(Array(classOf[AreaOfInterest], classOf[Hit], classOf[HitToAreaOfInterests]))
 
     val sparkSession = SparkSession
       .builder
@@ -36,7 +33,7 @@ object JdbcHiveJob {
       logger.info("*** JdbcHiveJob Spark session stopped.")
     }
 
-    import sparkSession.implicits._
+    // import sparkSession.implicits._
 
     // Build spark job.
 

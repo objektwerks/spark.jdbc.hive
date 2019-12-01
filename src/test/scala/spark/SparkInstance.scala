@@ -3,6 +3,7 @@ package spark
 import java.io.File
 
 import org.apache.spark.sql.SparkSession
+import org.apache.log4j.Logger
 
 object SparkInstance {
   private val logger = Logger.getLogger(getClass.getSimpleName)
@@ -18,7 +19,7 @@ object SparkInstance {
     .appName("spark-app")
     .config("spark.sql.shuffle.partitions", "4")
     .config("spark.sql.warehouse.dir", sparkWarehouseDir)
-    .config("spark.eventLog.enabled", true)
+    .config("spark.eventLog.enabled", value = true)
     .config("spark.eventLog.dir", sparkEventLogDir)
     .enableHiveSupport
     .getOrCreate()
