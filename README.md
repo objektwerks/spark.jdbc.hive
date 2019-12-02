@@ -4,15 +4,15 @@ Spark Jdbc Hive Job
 
 Source
 ------
-1. Jdbc store with 1 table, 1 column.
+1. Jdbc store with keyvalue table, with key(int) and value(int) columns.
 
 Flow
 ----
-1. Transform source value to new value.
+1. Transform source keyvalue to new keyvalue by incrementing value + 1.
 
 Sink
 ----
-1. Hive store with 1 table, 1 column.
+1. Hive store with keyvalue table, with key(int) and value(int) columns.
 
 Test
 ----
