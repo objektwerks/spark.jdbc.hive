@@ -7,14 +7,24 @@ import org.apache.spark.sql.SparkSession
 
 object JdbcHiveJob {
   def main(args: Array[String]): Unit = {
+    if (args.length != 2) {
+      println("*** Required args(0) = Jdbc Url and args(1) = Hive Table ***")
+      System.exit(-1)
+    }
+
     val logger = Logger.getLogger(getClass.getSimpleName)
     val conf = ConfigFactory.load("job.conf").getConfig("job")
 
+    val jdbcUrl = args(0)
+    val hiveTable = args(1)
+    logger.info(s"Jdbc Url: $jdbcUrl")
+    logger.info(s"Hive Table: $hiveTable")
+
     makeSparkEventLogDir(conf.getString("spark.eventLog.dir"))
-    runJob(logger, conf)
+    runJob(logger, conf, jdbcUrl, hiveTable)
   }
 
-  def runJob(logger: Logger, conf: Config): Unit = {
+  def runJob(logger: Logger, conf: Config, jdbcUrl: String, hiveTable: String): Unit = {
     val sparkConf = new SparkConf()
       .setMaster(conf.getString("master"))
       .setAppName(conf.getString("name"))
