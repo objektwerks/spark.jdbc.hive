@@ -3,28 +3,18 @@ package spark
 import com.typesafe.config.{Config, ConfigFactory}
 import org.apache.log4j.Logger
 import org.apache.spark.SparkConf
-import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.{SaveMode, SparkSession}
 
 object JdbcHiveJob {
   def main(args: Array[String]): Unit = {
-    if (args.length != 2) {
-      println("*** Required args(0) = Jdbc Url and args(1) = Hive Table ***")
-      System.exit(-1)
-    }
-
     val logger = Logger.getLogger(getClass.getSimpleName)
     val conf = ConfigFactory.load("job.conf").getConfig("job")
 
-    val jdbcUrl = args(0)
-    val hiveTable = args(1)
-    logger.info(s"Jdbc Url: $jdbcUrl")
-    logger.info(s"Hive Table: $hiveTable")
-
     makeSparkEventLogDir(conf.getString("spark.eventLog.dir"))
-    runJob(logger, conf, jdbcUrl, hiveTable)
+    runJob(logger, conf)
   }
 
-  def runJob(logger: Logger, conf: Config, jdbcUrl: String, hiveTable: String): Unit = {
+  def runJob(logger: Logger, conf: Config): Unit = {
     val sparkConf = new SparkConf()
       .setMaster(conf.getString("master"))
       .setAppName(conf.getString("name"))
@@ -43,10 +33,23 @@ object JdbcHiveJob {
       logger.info("*** JdbcHiveJob Spark session stopped.")
     }
 
-    // import sparkSession.implicits._
+    import sparkSession.implicits._
 
-    // Build spark job.
-
+    sparkSession
+      .sqlContext
+      .read
+      .format("jdbc")
+      .option("driver", conf.getString("db.driver"))
+      .option("url", conf.getString("db.url"))
+      .option("user", conf.getString("db.user"))
+      .option("password", conf.getString("db.password"))
+      .option("dbtable", conf.getString("db.table"))
+      .load
+      .as[KeyValue]
+      .map(keyvalue => keyvalue.copy(value = keyvalue.value + 1))
+      .write
+      .mode(SaveMode.Overwrite)
+      .saveAsTable(conf.getString("hive.table"))
     ()
   }
 }

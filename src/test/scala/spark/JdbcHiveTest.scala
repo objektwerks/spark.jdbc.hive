@@ -1,13 +1,7 @@
 package spark
 
-import org.apache.spark.sql.{Dataset, Encoders, SaveMode}
+import org.apache.spark.sql.{Dataset, SaveMode}
 import org.scalatest.{FunSuite, Matchers}
-
-case class KeyValue(key: Int, value: Int)
-
-object KeyValue {
-  val keyValueSchema = Encoders.product[KeyValue].schema
-}
 
 class JdbcHiveTest extends FunSuite with Matchers {
   import SparkInstance._
