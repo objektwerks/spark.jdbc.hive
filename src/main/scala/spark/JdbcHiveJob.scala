@@ -8,7 +8,7 @@ import org.apache.spark.sql.{SaveMode, SparkSession}
 object JdbcHiveJob {
   def main(args: Array[String]): Unit = {
     val logger = Logger.getLogger(getClass.getSimpleName)
-    val conf = ConfigFactory.load("job.conf").getConfig("job")
+    val conf = ConfigFactory.load("job.conf")
 
     makeSparkEventLogDir(conf.getString("spark.eventLog.dir"))
     runJob(logger, conf)
@@ -16,11 +16,11 @@ object JdbcHiveJob {
 
   def runJob(logger: Logger, conf: Config): Unit = {
     val sparkConf = new SparkConf()
-      .setMaster(conf.getString("master"))
-      .setAppName(conf.getString("name"))
-      .set("spark.serializer", conf.getString("spark.serializer"))
-      .set("spark.eventLog.enabled", conf.getBoolean("spark.eventLog.enabled").toString)
-      .set("spark.eventLog.dir", conf.getString("spark.eventLog.dir"))
+      .setAppName(conf.getString("job.name"))
+      .setMaster(conf.getString("job.master"))
+      .set("spark.serializer", conf.getString("job.spark.serializer"))
+      .set("spark.eventLog.enabled", conf.getBoolean("job.spark.eventLog.enabled").toString)
+      .set("spark.eventLog.dir", conf.getString("job.spark.eventLog.dir"))
 
     val sparkSession = SparkSession
       .builder
