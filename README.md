@@ -2,6 +2,10 @@ Spark Jdbc Hive Job
 -------------------
 >Job that sources a Jdbc store, transforms values and sinks to a Hive store.
 
+TODO
+----
+1. Complete job.conf for target Oracle and Hive store.
+
 Source
 ------
 1. Jdbc store with keyvalue table, with key(int) and value(int) columns.
