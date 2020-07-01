@@ -1,9 +1,10 @@
 package spark
 
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 import org.apache.spark.sql.{Dataset, SaveMode}
-import org.scalatest.{FunSuite, Matchers}
 
-class JdbcHiveTest extends FunSuite with Matchers {
+class JdbcHiveTest extends AnyFunSuite with Matchers {
   import SparkInstance._
   import sparkSession.implicits._
 
