@@ -23,13 +23,13 @@ object JdbcHiveJob {
       .set("spark.eventLog.dir", conf.getString("job.spark.eventLog.dir"))
 
     val sparkSession = SparkSession
-      .builder
+      .builder()
       .config(sparkConf)
       .getOrCreate()
     logger.info("*** JdbcHiveJob Spark session built. Press Ctrl C to stop.")
 
     sys.addShutdownHook {
-      sparkSession.stop
+      sparkSession.stop()
       logger.info("*** JdbcHiveJob Spark session stopped.")
     }
 
@@ -44,7 +44,7 @@ object JdbcHiveJob {
       .option("user", conf.getString("db.user"))
       .option("password", conf.getString("db.password"))
       .option("dbtable", conf.getString("db.table"))
-      .load
+      .load()
       .as[KeyValue]
       .map(keyvalue => keyvalue.copy(value = keyvalue.value + 1))
       .write
