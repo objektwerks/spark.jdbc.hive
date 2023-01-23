@@ -13,6 +13,6 @@ libraryDependencies ++= {
     "com.oracle.ojdbc" % "ojdbc8" % "19.3.0.0",
     "com.h2database" % "h2" % "2.1.214" % Test,
     "org.scalikejdbc" %% "scalikejdbc" % "4.0.0" % Test,
-    "org.scalatest" %% "scalatest" % "3.2.14" % Test
+    "org.scalatest" %% "scalatest" % "3.2.15" % Test
   )
 }
