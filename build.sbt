@@ -11,7 +11,7 @@ libraryDependencies ++= {
     "org.apache.spark" %% "spark-hive" % sparkVersion % Provided,
     "com.typesafe" % "config" % "1.4.2",
     "com.oracle.ojdbc" % "ojdbc8" % "19.3.0.0",
-    "com.h2database" % "h2" % "2.1.214" % Test,
+    "com.h2database" % "h2" % "2.1.220" % Test,
     "org.scalikejdbc" %% "scalikejdbc" % "3.5.0" % Test,
     "org.scalatest" %% "scalatest" % "3.2.16" % Test
   )
