@@ -12,7 +12,7 @@ libraryDependencies ++= {
     "com.typesafe" % "config" % "1.4.2",
     "com.oracle.ojdbc" % "ojdbc8" % "19.3.0.0",
     "com.h2database" % "h2" % "2.2.224" % Test,
-    "org.scalikejdbc" %% "scalikejdbc" % "3.5.0" % Test,
+    "org.scalikejdbc" %% "scalikejdbc" % "4.1.0" % Test,
     "org.scalatest" %% "scalatest" % "3.2.17" % Test
   )
 }
